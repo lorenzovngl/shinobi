@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hiragana</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<style type="text/css">
+		body {
+			font-family: Arial, Sans-Serif;
+		}
+
+		table, img {
+			margin: auto;
+		}
+
+		div {
+			font-weight: bold;
+			text-align: center;
+		}
+
+		img {
+			height: 50px;
+			display: block;
+		}
+
+        .kana {
+            font-size: 30px
+        }
+
+		.write-mode {
+			height: 25px;
+		}
+	</style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <h1>Hiragana</h1>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table">
+                    </table>
+                </div>
+                <div class="col-12">
+                    <table class="table">
+                    </table>
+                </div>
+                <div class="col-12">
+                    <table class="table">
+                    </table>
+                </div>
+                <div class="col-12">
+                    <table class="table">
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <h1>Katakana</h1>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table">
+                    </table>
+                </div>
+                <div class="col-12">
+                    <table class="table">
+                    </table>
+                </div>
+                <div class="col-12">
+                    <table class="table">
+                    </table>
+                </div>
+                <div class="col-12">
+                    <table class="table">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script type="text/javascript" src="translator.js"></script>
+<script type="text/javascript" src="utils.js"></script>
+<script type="application/javascript">
+    $(document).ready(function () {
+
+        let kana;
+
+        $.ajax({
+            type: "GET",
+            url: "kana.csv",
+            dataType: "text",
+            success: function (data) {
+                kana = parseCSV(data);
+                main();
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+
+        function main(){
+            let hiragana_gojuuon = [
+                ['a', 'i', 'u', 'e', 'o'],
+                ['ka', 'ki', 'ku', 'ke', 'ko'],
+                ['sa', 'shi', 'su', 'se', 'so'],
+                ['ta', 'chi', 'tsu', 'te', 'to'],
+                ['na', 'ni', 'nu', 'ne', 'no'],
+                ['ha', 'hi', 'fu', 'he', 'ho'],
+                ['ma', 'mi', 'mu', 'me', 'mo'],
+                ['ra', 'ri', 'ru', 're', 'ro'],
+                ['ya', 'yu', 'yo'],
+                ['wa', 'wo', 'n']
+            ];
+
+            let hiragana_gojuuon_tenten_maru = [
+                ['ga', 'gi', 'gu', 'ge', 'go'],
+                ['za', 'ji', 'zu', 'ze', 'zo'],
+                ['da', 'dji', 'dzu', 'ze', 'zo'],
+                ['ba', 'bi', 'bu', 'be', 'bo'],
+                ['pa', 'pi', 'pu', 'pe', 'po']
+            ];
+
+            let hiragana_yoon = [
+                ['kya', 'kyu', 'kyo'],
+                ['sha', 'shu', 'sho'],
+                ['cha', 'chu', 'cho'],
+                ['nya', 'nyu', 'nyo'],
+                ['hya', 'hyu', 'hyo'],
+                ['mya', 'myu', 'myo'],
+                ['rya', 'ryu', 'ryo']
+            ];
+
+            let hiragana_yoon_tenten_maru = [
+                ['gya', 'gyu', 'gyo'],
+                ['ja', 'ju', 'jo'],
+                ['dja', 'dju', 'djo'],
+                ['bya', 'byu', 'byo'],
+                ['pya', 'pyu', 'pyo'],
+            ];
+
+            function printHiraganaAndWriteMode(row) {
+                let html = "<tr>";
+                row.forEach(function (val) {
+                    let cell =
+                        '<div>' + val + '</div>' +
+                        '<div class="kana">' + romajiToHiragana(kana, val.toUpperCase(), true) + '</div>' +
+                        '<img class="write-mode" src="symbols/hiragana/Hiragana_' + val.toUpperCase() + '_mode.png">';
+                    html += "<td>" + cell + "</td>";
+                });
+                table.append(html + "</tr>")
+            }
+
+            function printHiragana(row) {
+                let html = "<tr>";
+                row.forEach(function (val) {
+                    let cell =
+                        '<div>' + val + '</div>' +
+                        '<div class="kana">' + romajiToHiragana(kana, val.toUpperCase(), false) + '</div>';
+                    html += "<td>" + cell + "</td>";
+                });
+                table.append(html + "</tr>")
+            }
+
+            function printKatakana(row) {
+                let html = "<tr>";
+                row.forEach(function (val) {
+                    let cell =
+                        '<div>' + val + '</div>' +
+                        '<div class="kana">' + romajiToKatakana(kana, val.toUpperCase(), false) + '</div>';
+                    html += "<td>" + cell + "</td>";
+                });
+                table.append(html + "</tr>")
+            }
+
+            let table = $("table").eq(0);
+            //hiragana_gojuuon.forEach(printHiraganaAndWriteMode);
+            hiragana_gojuuon.forEach(printHiragana);
+            table = $("table").eq(1);
+            hiragana_gojuuon_tenten_maru.forEach(printHiragana);
+            table = $("table").eq(2);
+            hiragana_yoon.forEach(printHiragana);
+            table = $("table").eq(3);
+            hiragana_yoon_tenten_maru.forEach(printHiragana);
+
+            table = $("table").eq(4);
+            hiragana_gojuuon.forEach(printKatakana);
+            table = $("table").eq(5);
+            hiragana_gojuuon_tenten_maru.forEach(printKatakana);
+            table = $("table").eq(6);
+            hiragana_yoon.forEach(printKatakana);
+            table = $("table").eq(7);
+            hiragana_yoon_tenten_maru.forEach(printKatakana);
+        }
+
+    });
+</script>
+</body>
+</html>

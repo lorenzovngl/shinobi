@@ -1,0 +1,40 @@
+html, body, .container-fluid {
+    height: 100%;
+}
+
+#question {
+    text-align: center;
+    font-size: 200px;
+}
+
+#question img {
+    height: 200px;
+}
+
+#answer {
+    display: none;
+}
+
+.dot {
+    height: 20px;
+    width: 20px;
+    margin: 3px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+.btn-level {
+    margin: 2px;
+    width: 100%;
+}
+
+@media (max-width: 576px) {
+    #question {
+        font-size: 50px;
+    }
+
+    #question img {
+        height: 50px;
+    }
+}
